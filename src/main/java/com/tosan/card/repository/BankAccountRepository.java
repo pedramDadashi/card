@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface BankAccountRepository extends BaseRepository<BankAccount, Long> {
 
 
-    boolean existsByAccountNumber(int accountNumber);
+    boolean existsByBankInformation_AccountNumber(int accountNumber);
 
     List<BankAccount> findAllByClient_Id(Long clientId);
 
