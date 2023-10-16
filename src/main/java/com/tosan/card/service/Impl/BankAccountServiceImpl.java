@@ -21,7 +21,7 @@ public class BankAccountServiceImpl extends BaseServiceImpl<BankAccount, Long, B
 
     @Override
     public boolean existByAccountNumber(int accountNumber) {
-        return repository.existsByAccountNumber(accountNumber);
+        return repository.existsByBankInformation_AccountNumber(accountNumber);
     }
 
     @Override
