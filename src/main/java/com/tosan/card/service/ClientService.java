@@ -39,6 +39,8 @@ public interface ClientService extends UsersService<Client> {
 
     void addPeriodicRestriction(PeriodicRestrictionRequestDTO periodicRestrictionRequestDTO, Long clientId);
 
+    RestrictionResponseDTO showRestriction(String restrictionName, Long clientId);
+
 //    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
 
 //    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
@@ -51,7 +53,7 @@ public interface ClientService extends UsersService<Client> {
 
     List<RestrictionResponseDTO> findAllRestrictions(Long clientId);
 
-    RestrictionResponseDTO showRestriction(String restrictionName, Long clientId);
+
 
     void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
 
