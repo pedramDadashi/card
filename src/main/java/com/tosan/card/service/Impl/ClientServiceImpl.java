@@ -161,19 +161,16 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         return restrictionMapper.fromRestrictionToRestrictionResponseDTO(restriction.get());
     }
 
-
-
     @Override
     @Transactional(readOnly = true)
-    public List<RestrictionResponseDTO> findAllRestrictions(Long clientId) {
-        List<RestrictionResponseDTO> restrictionResponseDTOList = new ArrayList<>();
+    public List<RestrictionResponseDTO> showAllRestrictions(Long clientId) {
         Optional<Client> client = repository.findById(clientId);
-        if (!client.get().getRestrictionList().isEmpty())
-            client.get().getRestrictionList().stream().forEach(restriction ->
-                    restrictionResponseDTOList.add(
-                            restrictionMapper.fromRestrictionToRestrictionResponseDTO(restriction)
-                    )
-            );
+        if (client.get().getRestrictionList().isEmpty())
+            throw new InvalidRestrictionException("does not exist restriction");
+        List<RestrictionResponseDTO> restrictionResponseDTOList = new ArrayList<>();
+        client.get().getRestrictionList().stream().forEach(r ->
+                restrictionResponseDTOList.add(
+                        restrictionMapper.fromRestrictionToRestrictionResponseDTO(r)));
         return restrictionResponseDTOList;
     }
 
