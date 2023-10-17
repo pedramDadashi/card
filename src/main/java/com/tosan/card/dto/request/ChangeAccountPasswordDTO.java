@@ -14,10 +14,12 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class ChangeAccountPasswordDTO {
 
-     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+   static final String emailRegexp="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+
+     @Pattern(regexp = emailRegexp ,
              message = "Password must be stronger")
      String newPassword;
-     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+     @Pattern(regexp = emailRegexp ,
              message = "Password must be stronger")
      String confirmNewPassword;
 

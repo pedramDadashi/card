@@ -24,9 +24,9 @@ public abstract class Card extends BaseEntity<Long> {
 
     String name;
     String number;
-    int cvv2;
+    String cvv2;
     LocalDate expirationDate;
-    int passcode;
+    String passcode;
     boolean block ;
     boolean changedPasscode ;
     Long cardBalance;

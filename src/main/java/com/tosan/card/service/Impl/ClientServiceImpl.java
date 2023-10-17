@@ -28,12 +28,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Service
 @Transactional
 public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepository>
         implements ClientService {
+
+    private static final String BANK_CARD_DEFAULT_PASSCODE = "1234";
 
     private final BankAccountService bankAccountService;
     private final RestrictionService restrictionService;
@@ -177,10 +180,6 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
     @Override
     public void addCreditCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId) {
         Optional<Client> client = repository.findById(clientId);
-        if (client.get().getBankAccountList().stream().anyMatch(
-                ba -> ba.getCardList().stream().anyMatch(
-                        c -> c.getName().equals(bankCardRequestDTO.getCardName()))))
-            throw new InvalidCardException("this card name already exist!");
         Optional<BankAccount> bankAccount =
                 client.get().getBankAccountList().stream().filter(ba ->
                         ba.getAccountName().equals(bankCardRequestDTO.getAccountName())).findFirst();
@@ -205,20 +204,25 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         cardService.save(card);
     }
 
-
     @Override
-    public void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId) {
-
-        Optional<Card> card = cardService.findByNumber(changeCardPasswordDTO.getCardNumber());
-        if (card.isEmpty())
-            card = cardService.findByName(changeCardPasswordDTO.getCardName());
-        if (card.isEmpty())
-            throw new InvalidCardException("this card does not exist!");
-
+    public void changeCardPasscode(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId) {
         Optional<Client> client = repository.findById(clientId);
+        AtomicReference<Optional<Card>> cardDb = new AtomicReference<>();
+        client.get().getBankAccountList().forEach(
+                ba -> cardDb.set(ba.getCardList().stream().filter(
+                        c -> c.getNumber().equals(changeCardPasswordDTO.getCardNumber())).findFirst()));
+        Optional<Card> optionalCard = cardDb.get();
+        if (optionalCard.isEmpty())
+            throw new InvalidCardException("this card number does not exist!");
+        Card card = optionalCard.get();
+        bankCardPasscodeLimits(card, changeCardPasswordDTO.getNewPasscode());
+        card.setPasscode(changeCardPasswordDTO.getNewPasscode());
+        if (!card.isChangedPasscode())
+            card.setBlock(false);
+        card.setChangedPasscode(true);
+        cardService.save(card);
 
     }
-
 
     private void setPeriodDaysFromPeriodType(Restriction restriction) {
         if (!restriction.getPeriod().name().equals(Period.CUSTOM.name())) {
@@ -242,9 +246,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
                 buildCardNumber(),
                 buildCardCvv2(),
                 buildCardExpireDate(),
-                getCardPasscode(),
-                true,
-                false,
+                BANK_CARD_DEFAULT_PASSCODE,
                 amountRestriction
         );
     }
@@ -258,9 +260,9 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
                randomCardNumber.nextLong(3333L, 4444L);
     }
 
-    private int buildCardCvv2() {
+    private String buildCardCvv2() {
         Random randomCardCvv2 = new Random();
-        return randomCardCvv2.nextInt(111, 9999);
+        return String.valueOf(randomCardCvv2.nextInt(111, 9999));
     }
 
     private LocalDate buildCardExpireDate() {
@@ -268,9 +270,12 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         return LocalDate.now().plusMonths(bankCardValidityPeriod);
     }
 
-    private int getCardPasscode() {
-        int bankCardDefaultPasscode = 1234;
-        return bankCardDefaultPasscode;
+    private void bankCardPasscodeLimits(Card card, String newPasscode) {
+        if (card.getPasscode().equals(newPasscode))
+            throw new PasswordsNotSameException("duplicate new passcode!");
+        if (newPasscode.equals("0000"))
+            throw new PasswordsNotSameException("cannot enter 0000 as the passcode!");
     }
+
 
 }

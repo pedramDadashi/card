@@ -1,10 +1,7 @@
 package com.tosan.card.controller;
 
 
-import com.tosan.card.dto.request.BankAccountRequestDTO;
-import com.tosan.card.dto.request.BankCardRequestDTO;
-import com.tosan.card.dto.request.ChangeAccountPasswordDTO;
-import com.tosan.card.dto.request.PeriodicRestrictionRequestDTO;
+import com.tosan.card.dto.request.*;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
 import com.tosan.card.entity.Users;
@@ -82,6 +79,13 @@ public class ClientController {
             Authentication authentication) {
         clientService.addCreditCardWithRestriction(bankCardRequestDTO,
                 ((Users) authentication.getPrincipal()).getId());
+    }
+
+    @PutMapping("/change-card-passcode")
+    public void changeCardPasscode(
+            @Valid @RequestBody ChangeCardPasswordDTO changeCardPasswordDTO, Authentication authentication) {
+        clientService.changeCardPasscode(changeCardPasswordDTO,
+                        ((Users) authentication.getPrincipal()).getId());
     }
 
 }

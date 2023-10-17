@@ -1,5 +1,7 @@
 package com.tosan.card.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,9 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class ChangeCardPasswordDTO {
 
-     String cardName;
+     @Pattern(regexp = "^[1-9][0-9]{15}$")
      String cardNumber;
-     int newPassword;
+     @Pattern(regexp = "^[0-9]{4}$")
+     String newPasscode;
 
 }
