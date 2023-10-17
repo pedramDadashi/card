@@ -45,21 +45,6 @@ public interface ClientService extends UsersService<Client> {
 
     void addCreditCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId);
 
-//    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
-
-//    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
-
-//    void addNewNormalRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
-
-//    void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
-
-
-
-
-
-
-    void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
-
-
+    void changeCardPasscode(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
 
 }
