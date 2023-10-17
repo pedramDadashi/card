@@ -1,7 +1,5 @@
 package com.tosan.card.repository;
 
-
-
 import com.tosan.card.entity.Client;
 import org.springframework.stereotype.Repository;
 
