@@ -13,4 +13,6 @@ public interface ClientRepository extends UsersRepository<Client> {
     @Override
     Optional<Client> findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
 }

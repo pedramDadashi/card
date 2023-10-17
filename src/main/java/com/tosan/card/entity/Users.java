@@ -37,13 +37,13 @@ public abstract class Users extends BaseEntity<Long> implements UserDetails {
     Role role;
 
     protected Users(String firstname, String lastname, String email,
-                    String nationalCode, String password, boolean isActive, Role role) {
+                    String nationalCode, String password, Role role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.nationalCode = nationalCode;
         this.password = password;
-        this.isActive = isActive;
+        this.isActive = true;
         this.role = role;
     }
 
