@@ -6,7 +6,9 @@ import com.tosan.card.dto.request.*;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
 import com.tosan.card.entity.*;
+import com.tosan.card.entity.enumuration.Role;
 import com.tosan.card.exception.BankAccountException;
+import com.tosan.card.exception.DuplicateClientException;
 import com.tosan.card.exception.InvalidCardException;
 import com.tosan.card.exception.RestrictionDoesNotExistException;
 import com.tosan.card.mapper.BankMapper;
@@ -56,16 +58,22 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
     }
 
     @Override
-    public Optional<Client> findByUsername(String email) {
-        return repository.findByEmail(email);
+    public void addNewRegularClient(RegularClientRegistrationDTO dto) {
+        if (repository.existsByEmail(dto.getEmail()))
+            throw new DuplicateClientException("there is a client with this email!");
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        Client client = clientMapper.fromRegularClientRegistrationDTOToNewRegularClient(dto);
+        client.setRole(Role.CLIENT);
+        client.setIsActive(true);
+        repository.save(client);
     }
 
 
     @Override
-    public void addNewRegularClient(RegularClientRegistrationDTO dto) {
-        Client client = clientMapper.convertToNewRegularClient(dto);
-        repository.save(client);
+    public Optional<Client> findByUsername(String email) {
+        return repository.findByEmail(email);
     }
+
 
     @Override
     public void changeAccountPassword(ChangeAccountPasswordDTO changeAccountPasswordDTO, Long clientId) {
@@ -200,7 +208,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 
     @Override
     public void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO,
-                                              Long clientId) {
+                                   Long clientId) {
 
         Optional<Card> card = cardService.findByNumber(changeCardPasswordDTO.getCardNumber());
         if (card.isEmpty())

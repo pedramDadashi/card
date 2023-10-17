@@ -30,16 +30,16 @@ public abstract class Client extends Users {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
     List<Restriction> restrictionList = new ArrayList<>();
 
-    public Client(String firstname, String lastname, String email,
+    protected Client(String firstname, String lastname, String email,
                   String nationalCode, String password) {
-        super(firstname, lastname, email, nationalCode, password, false, Role.CLIENT);
+        super(firstname, lastname, email, nationalCode, password, Role.CLIENT);
     }
 
-    public void addBankAccount(BankAccount bankAccount) {
+    protected void addBankAccount(BankAccount bankAccount) {
         this.bankAccountList.add(bankAccount);
     }
 
-    public void addRestriction(Restriction restriction) {
+    protected void addRestriction(Restriction restriction) {
         this.restrictionList.add(restriction);
     }
 
