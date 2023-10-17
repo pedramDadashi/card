@@ -37,13 +37,15 @@ public interface ClientService extends UsersService<Client> {
 
     List<BankAccountResponseDTO> showAllBankAccounts(Long clientId);
 
+    void addPeriodicRestriction(PeriodicRestrictionRequestDTO periodicRestrictionRequestDTO, Long clientId);
+
 //    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
 
 //    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
 
 //    void addNewNormalRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
 
-    void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
+//    void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
 
     void addNewBankCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId);
 

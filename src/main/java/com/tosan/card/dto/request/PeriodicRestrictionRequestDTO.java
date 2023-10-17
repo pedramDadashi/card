@@ -1,13 +1,15 @@
 package com.tosan.card.dto.request;
 
 import com.tosan.card.dto.enumuration.PeriodDTO;
-import com.tosan.card.dto.enumuration.UseTypeDTO;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -15,16 +17,20 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
-public class PeriodicRestrictionRequestDTO extends RestrictionRequestDTO {
+public class PeriodicRestrictionRequestDTO {
 
-     PeriodDTO period;
-     boolean saveTheAmountFromPreviousPeriod;
+    @NotBlank(message = "Name cannot be blank")
+    String name;
+    @Enumerated(value = EnumType.STRING)
+    PeriodDTO period;
+    @Min(0)
+    @Max(90)
+    int periodDays;
+    @Min(1)
+    @Max(364)
+    int periodRepeat;
+    @Min(10000000)
+    @Max(Long.MAX_VALUE)
+    Long amountRestriction;
 
-     public PeriodicRestrictionRequestDTO(String name, Long amountRestriction, UseTypeDTO useType,
-                                          LocalDate validityDateOfTheRestriction, int validityDaysOfTheRestriction,
-                                          PeriodDTO period, boolean saveTheAmountFromPreviousPeriod) {
-          super(name, amountRestriction, useType, validityDateOfTheRestriction, validityDaysOfTheRestriction);
-          this.period = period;
-          this.saveTheAmountFromPreviousPeriod = saveTheAmountFromPreviousPeriod;
-     }
 }
