@@ -47,4 +47,5 @@ public interface ClientService extends UsersService<Client> {
 
     void changeCardPasscode(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
 
+    void resetCardPasscode(String cardNumber,Long clientId);
 }

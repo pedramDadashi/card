@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -85,7 +86,14 @@ public class ClientController {
     public void changeCardPasscode(
             @Valid @RequestBody ChangeCardPasswordDTO changeCardPasswordDTO, Authentication authentication) {
         clientService.changeCardPasscode(changeCardPasswordDTO,
-                        ((Users) authentication.getPrincipal()).getId());
+                ((Users) authentication.getPrincipal()).getId());
+    }
+
+    @PutMapping("/reset-card-passcode/{cardNumber}")
+    public void resetCardPasscode(
+            @PathVariable @Valid @Pattern(regexp = "^[1-9][0-9]{15}$") String cardNumber
+            , Authentication authentication) {
+        clientService.resetCardPasscode(cardNumber, ((Users) authentication.getPrincipal()).getId());
     }
 
 }
