@@ -2,6 +2,7 @@ package com.tosan.card.service.Impl;
 
 
 import com.tosan.card.base.service.BaseServiceImpl;
+import com.tosan.card.dto.TemporaryBankCard;
 import com.tosan.card.dto.request.*;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
@@ -25,10 +26,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 
 @Service
@@ -176,38 +175,39 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 
 
     @Override
-    public void addNewBankCardWithRestriction(BankCardRequestDTO bankCardRequestDTO,
-                                              Long clientId) {
+    public void addCreditCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId) {
         Optional<Client> client = repository.findById(clientId);
         if (client.get().getBankAccountList().stream().anyMatch(
-                ba ->
-                        ba.getCardList().stream().anyMatch(
-                                c ->
-                                        c.getName().equals(bankCardRequestDTO.getCardName())
-                        )
-        )
-        ) throw new InvalidCardException("this card does exist");
+                ba -> ba.getCardList().stream().anyMatch(
+                        c -> c.getName().equals(bankCardRequestDTO.getCardName()))))
+            throw new InvalidCardException("this card name already exist!");
         Optional<BankAccount> bankAccount =
                 client.get().getBankAccountList().stream().filter(ba ->
                         ba.getAccountName().equals(bankCardRequestDTO.getAccountName())).findFirst();
         if (bankAccount.isEmpty())
-            throw new BankAccountException("this account does not exist!");
+            throw new InvalidAccountException("does not exist account with this account name");
         Optional<Restriction> restriction =
                 client.get().getRestrictionList().stream().filter(r ->
                         r.getName().equals(bankCardRequestDTO.getRestrictionName())).findFirst();
         if (restriction.isEmpty())
-            throw new RestrictionDoesNotExistException("this restriction does not exist!");
-//        if ((bankAccount.get() .getBankInformation().getBalance()) <
-//            (500000L + restriction.get().getAmountRestriction()))
-//            throw new BankAccountException("this bank account balance is insufficient");
-//        Card card = cardMapper.convertToCreditCard(
-//                bankCardRequestDTO.getCardName(), bankAccount.get(), restriction.get());
-//        cardService.save(card);
+            throw new InvalidRestrictionException("does not exist restriction with this restriction name");
+        if ((bankAccount.get().getBalance()) <
+            (500000L + restriction.get().getAmountRestriction()))
+            throw new BankAccountException("this bank account balance is insufficient");
+        TemporaryBankCard temporaryBankCard =
+                buildTemporaryBankCard(bankCardRequestDTO.getCardName(),
+                        restriction.get().getAmountRestriction());
+        Card card = cardMapper.fromTemporaryBankCardToCreditCard(temporaryBankCard);
+        bankAccount.get().addCard(card);
+        card.setBankAccount(bankAccount.get());
+        bankAccountService.save(bankAccount.get());
+        card.setRestriction(restriction.get());
+        cardService.save(card);
     }
 
+
     @Override
-    public void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO,
-                                   Long clientId) {
+    public void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId) {
 
         Optional<Card> card = cardService.findByNumber(changeCardPasswordDTO.getCardNumber());
         if (card.isEmpty())
@@ -234,6 +234,43 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
                 restriction.setPeriodDays(30);
             }
         }
+    }
+
+    private TemporaryBankCard buildTemporaryBankCard(String cardName, Long amountRestriction) {
+        return new TemporaryBankCard(
+                cardName,
+                buildCardNumber(),
+                buildCardCvv2(),
+                buildCardExpireDate(),
+                getCardPasscode(),
+                true,
+                false,
+                amountRestriction
+        );
+    }
+
+    private String buildCardNumber() {
+        Random randomCardNumber = new Random();
+        return String.valueOf(
+                randomCardNumber.nextLong(4444L, 6666L)) +
+               randomCardNumber.nextLong(1111L, 2222L) +
+               randomCardNumber.nextLong(2222L, 3333L) +
+               randomCardNumber.nextLong(3333L, 4444L);
+    }
+
+    private int buildCardCvv2() {
+        Random randomCardCvv2 = new Random();
+        return randomCardCvv2.nextInt(111, 9999);
+    }
+
+    private LocalDate buildCardExpireDate() {
+        int bankCardValidityPeriod = 40;
+        return LocalDate.now().plusMonths(bankCardValidityPeriod);
+    }
+
+    private int getCardPasscode() {
+        int bankCardDefaultPasscode = 1234;
+        return bankCardDefaultPasscode;
     }
 
 }

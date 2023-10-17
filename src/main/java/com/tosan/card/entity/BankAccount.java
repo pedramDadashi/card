@@ -38,4 +38,8 @@ public abstract class BankAccount extends BaseEntity<Long> {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
+
+    public void addCard(Card card) {
+        this.cardList.add(card);
+    }
 }

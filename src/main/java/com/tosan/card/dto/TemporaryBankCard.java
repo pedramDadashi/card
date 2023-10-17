@@ -1,6 +1,5 @@
-package com.tosan.card.entity;
+package com.tosan.card.dto;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +10,18 @@ import java.time.LocalDate;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
-@Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
-public class CreditCard extends Card {
+public class TemporaryBankCard {
+
+     String name;
+     String number;
+     int cvv2;
+     LocalDate expirationDate;
+     int passcode;
+     boolean block ;
+     boolean changedPasscode ;
+     Long cardBalance;
 
 }

@@ -26,9 +26,9 @@ public abstract class Card extends BaseEntity<Long> {
     String number;
     int cvv2;
     LocalDate expirationDate;
-    int password;
+    int passcode;
     boolean block ;
-    boolean changePassword ;
+    boolean changedPasscode ;
     Long cardBalance;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bankAccount_id")
