@@ -7,10 +7,7 @@ import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
 import com.tosan.card.entity.*;
 import com.tosan.card.entity.enumuration.Role;
-import com.tosan.card.exception.BankAccountException;
-import com.tosan.card.exception.DuplicateClientException;
-import com.tosan.card.exception.InvalidCardException;
-import com.tosan.card.exception.RestrictionDoesNotExistException;
+import com.tosan.card.exception.*;
 import com.tosan.card.mapper.BankMapper;
 import com.tosan.card.mapper.CardMapper;
 import com.tosan.card.mapper.ClientMapper;
@@ -77,11 +74,11 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 
     @Override
     public void changeAccountPassword(ChangeAccountPasswordDTO changeAccountPasswordDTO, Long clientId) {
-        if (!changeAccountPasswordDTO.getNewPassword().equals(changeAccountPasswordDTO.getConfirmNewPassword())) {
-            Optional<Client> client = repository.findById(clientId);
-            client.get().setPassword(passwordEncoder.encode(changeAccountPasswordDTO.getConfirmNewPassword()));
-        }
-        // TODO refactor
+        if (!changeAccountPasswordDTO.getNewPassword().
+                equals(changeAccountPasswordDTO.getConfirmNewPassword()))
+            throw new PasswordsNotSameException("confirm password are not the same as new password!");
+        Optional<Client> client = repository.findById(clientId);
+        client.get().setPassword(passwordEncoder.encode(changeAccountPasswordDTO.getConfirmNewPassword()));
     }
 
     @Override

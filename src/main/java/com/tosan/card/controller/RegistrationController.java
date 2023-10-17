@@ -1,6 +1,6 @@
 package com.tosan.card.controller;
 
-import com.tosan.card.dto.request.ClientRegistrationDTO;
+
 import com.tosan.card.dto.request.RegularClientRegistrationDTO;
 import com.tosan.card.service.RegistrationService;
 import jakarta.validation.Valid;
