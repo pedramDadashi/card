@@ -35,6 +35,8 @@ public interface ClientService extends UsersService<Client> {
 
     BankAccountResponseDTO showBankAccount(Long bankAccountNumber, Long clientId);
 
+    List<BankAccountResponseDTO> showAllBankAccounts(Long clientId);
+
 //    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
 
 //    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
@@ -50,6 +52,7 @@ public interface ClientService extends UsersService<Client> {
     RestrictionResponseDTO showRestriction(String restrictionName, Long clientId);
 
     void changeCardPassword(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
+
 
 
 }

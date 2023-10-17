@@ -5,7 +5,10 @@ import com.tosan.card.base.service.BaseServiceImpl;
 import com.tosan.card.dto.request.*;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
-import com.tosan.card.entity.*;
+import com.tosan.card.entity.BankAccount;
+import com.tosan.card.entity.Card;
+import com.tosan.card.entity.Client;
+import com.tosan.card.entity.Restriction;
 import com.tosan.card.entity.enumuration.Role;
 import com.tosan.card.exception.*;
 import com.tosan.card.mapper.BankMapper;
@@ -13,13 +16,18 @@ import com.tosan.card.mapper.CardMapper;
 import com.tosan.card.mapper.ClientMapper;
 import com.tosan.card.mapper.RestrictionMapper;
 import com.tosan.card.repository.ClientRepository;
-import com.tosan.card.service.*;
-
+import com.tosan.card.service.BankAccountService;
+import com.tosan.card.service.CardService;
+import com.tosan.card.service.ClientService;
+import com.tosan.card.service.RestrictionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -106,6 +114,17 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         return bankMapper.fromBankAccountToBankAccountResponseDTO(bankAccount.get());
     }
 
+    @Override
+    public List<BankAccountResponseDTO> showAllBankAccounts(Long clientId) {
+        Optional<Client> client = repository.findById(clientId);
+        if (client.get().getBankAccountList().isEmpty())
+            throw new InvalidAccountException("does not exist account");
+        List<BankAccountResponseDTO> bankAccountResponseDTOList = new ArrayList<>();
+        client.get().getBankAccountList().forEach(ba ->
+                bankAccountResponseDTOList.add(
+                        bankMapper.fromBankAccountToBankAccountResponseDTO(ba)));
+        return bankAccountResponseDTOList;
+    }
 
     //    @Override
 //    @Transactional(readOnly = true)

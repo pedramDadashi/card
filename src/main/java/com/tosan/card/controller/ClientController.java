@@ -10,9 +10,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/client")
@@ -43,6 +44,11 @@ public class ClientController {
             Authentication authentication) {
         return clientService.showBankAccount(bankAccountNumber,
                 ((Users) authentication.getPrincipal()).getId());
+    }
+
+    @GetMapping("/show-all-bank-accounts")
+    public List<BankAccountResponseDTO> showAllBankAccount(Authentication authentication) {
+        return clientService.showAllBankAccounts(((Users) authentication.getPrincipal()).getId());
     }
 
 }
