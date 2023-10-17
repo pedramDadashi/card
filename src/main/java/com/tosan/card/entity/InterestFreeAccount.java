@@ -11,11 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 @Entity
 @NoArgsConstructor
-
 @FieldDefaults(level = PRIVATE)
 public class InterestFreeAccount extends BankAccount {
 
-    public InterestFreeAccount(String name, BankInformation bankInformation) {
-        super(name, bankInformation);
-    }
 }

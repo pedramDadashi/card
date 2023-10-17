@@ -27,18 +27,18 @@ public interface ClientService extends UsersService<Client> {
     @Override
     Optional<Client> findByUsername(String email);
 
-
     void addNewRegularClient(RegularClientRegistrationDTO regularClientRegistrationDTO);
 
     void changeAccountPassword(ChangeAccountPasswordDTO changeAccountPasswordDTO, Long clientId);
 
-    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
-
     void addInterestFreeBankAccount(BankAccountRequestDTO bankAccountDTO, Long clientId);
 
-    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
+//    List<BankAccountResponseDTO> showAllBankAccounts(Long clintId);
+
+//    BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId);
 
 //    void addNewNormalRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
+
     void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId);
 
     void addNewBankCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId);

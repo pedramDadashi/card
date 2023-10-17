@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface BankAccountRepository extends BaseRepository<BankAccount, Long> {
 
 
-    boolean existsByBankInformation_AccountNumber(int accountNumber);
+    boolean existsByAccountNumber(int accountNumber);
 
     List<BankAccount> findAllByClient_Id(Long clientId);
 
-    Optional<BankAccount> findByName(String accountName);
+    Optional<BankAccount> findByAccountName(String accountName);
 }

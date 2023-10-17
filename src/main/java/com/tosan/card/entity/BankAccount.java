@@ -19,17 +19,23 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public abstract class BankAccount extends BaseEntity<Long> {
 
-    String name;
+    String accountName;
+    String bankName;
+    int branchCode;
+    Long accountNumber;
+    Long balance;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     Client client;
-    @OneToOne
-    BankInformation bankInformation;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount")
     List<Card> cardList;
 
-    protected BankAccount(String name, BankInformation bankInformation) {
-        this.name = name;
-        this.bankInformation = bankInformation;
+    protected BankAccount(String accountName, String bankName, int branchCode,
+                          Long accountNumber, Long balance) {
+        this.accountName = accountName;
+        this.bankName = bankName;
+        this.branchCode = branchCode;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
     }
 }
