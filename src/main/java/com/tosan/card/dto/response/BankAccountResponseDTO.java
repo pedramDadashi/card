@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -15,11 +13,10 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class BankAccountResponseDTO {
 
-     String name;
+     String accountName;
      String bankName;
-     String branchName;
      int branchCode;
-     int accountNumber;
-     LocalDate openingDate;
+     Long accountNumber;
+     Long balance;
 
 }

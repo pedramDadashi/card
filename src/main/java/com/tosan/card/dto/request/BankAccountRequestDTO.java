@@ -27,8 +27,8 @@ public class BankAccountRequestDTO {
     @Min(1111)
     @Max(999999)
     int branchCode;
-    @Min(100000000)
-    @Max(Long.MAX_VALUE)
+    @Min(100000000L)
+    @Max(999999999999L)
     Long accountNumber;
     @Min(10000000)
     @Max(Long.MAX_VALUE)
