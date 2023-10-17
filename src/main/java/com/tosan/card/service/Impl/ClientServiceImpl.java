@@ -87,15 +87,27 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
                     Objects.equals(ba.getAccountNumber(), bankAccountDTO.getAccountNumber())))
                 throw new BankAccountException("this account number already exist!");
         }
-        BankAccount bankAccount = bankMapper.fromBankAccountRequestDTOInterestFreeAccount(bankAccountDTO);
+        BankAccount bankAccount = bankMapper.fromBankAccountRequestDTOToInterestFreeAccount(bankAccountDTO);
         client.get().addBankAccount(bankAccount);
         bankAccount.setClient(client.get());
         bankAccountService.save(bankAccount);
         repository.save(client.get());
     }
 
+    @Override
+    public BankAccountResponseDTO showBankAccount(Long bankAccountNumber, Long clientId) {
+        Optional<Client> client = repository.findById(clientId);
+        if (client.get().getBankAccountList().isEmpty())
+            throw new InvalidAccountException("does not exist account with this account number");
+        Optional<BankAccount> bankAccount = client.get().getBankAccountList().stream().filter(ba ->
+                Objects.equals(ba.getAccountNumber(), bankAccountNumber)).findFirst();
+        if (bankAccount.isEmpty())
+            throw new InvalidAccountException("does not exist account with this account number");
+        return bankMapper.fromBankAccountToBankAccountResponseDTO(bankAccount.get());
+    }
 
-//    @Override
+
+    //    @Override
 //    @Transactional(readOnly = true)
 //    public List<BankAccountResponseDTO> showAllBankAccounts(Long clintId) {
 //        List<BankAccountResponseDTO> baDTOS = new ArrayList<>();
@@ -106,21 +118,6 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 //        return baDTOS;
 //    }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public BankAccountResponseDTO showBankAccount(Long bankAccountId, Long clientId) {
-//        BankAccountResponseDTO bankAccountResponseDTO = new BankAccountResponseDTO();
-//        Optional<Client> client = repository.findById(clientId);
-//        Optional<BankAccount> bankAccount = client.get().getBankAccountList()
-//                .stream().filter(ba -> Objects.equals(ba.getId(), bankAccountId)).findFirst();
-//        if (bankAccount.isEmpty())
-//            return bankAccountResponseDTO;
-//        return bankMapper.convertToBankAccountDTO(bankAccount.get());
-////        if (client.get().getBankAccountList()
-////                .stream().noneMatch(ba -> ba.getId() == bankAccountId))
-////            return bankAccountResponseDTO;
-//
-//    }
 
     @Override
     public void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId) {
