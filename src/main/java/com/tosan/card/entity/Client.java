@@ -35,7 +35,7 @@ public abstract class Client extends Users {
         super(firstname, lastname, email, nationalCode, password, Role.CLIENT);
     }
 
-    protected void addBankAccount(BankAccount bankAccount) {
+    public void addBankAccount(BankAccount bankAccount) {
         this.bankAccountList.add(bankAccount);
     }
 
