@@ -71,5 +71,10 @@ public class ClientController {
                 ((Users) authentication.getPrincipal()).getId());
     }
 
+    @GetMapping("/show-all-restrictions")
+    public List<RestrictionResponseDTO> showAllRestrictions(Authentication authentication) {
+        return clientService.showAllRestrictions(((Users) authentication.getPrincipal()).getId());
+    }
+
 }
 
