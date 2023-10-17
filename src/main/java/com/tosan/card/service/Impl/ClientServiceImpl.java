@@ -104,6 +104,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BankAccountResponseDTO showBankAccount(Long bankAccountNumber, Long clientId) {
         Optional<Client> client = repository.findById(clientId);
         if (client.get().getBankAccountList().isEmpty())
@@ -116,6 +117,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BankAccountResponseDTO> showAllBankAccounts(Long clientId) {
         Optional<Client> client = repository.findById(clientId);
         if (client.get().getBankAccountList().isEmpty())
@@ -146,15 +148,20 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         repository.save(client.get());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public RestrictionResponseDTO showRestriction(String restrictionName, Long clientId) {
+        Optional<Client> client = repository.findById(clientId);
+        if (client.get().getRestrictionList().isEmpty())
+            throw new InvalidRestrictionException("does not exist restriction with this restriction name");
+        Optional<Restriction> restriction = client.get().getRestrictionList().stream().filter(r ->
+                Objects.equals(r.getName(), restrictionName)).findFirst();
+        if (restriction.isEmpty())
+            throw new InvalidRestrictionException("does not exist restriction with this restriction name");
+        return restrictionMapper.fromRestrictionToRestrictionResponseDTO(restriction.get());
+    }
 
-//    @Override
-//    public void addNewNormalRestriction(RestrictionRequestDTO restrictionRequestDTO,
-//                                        Long clientId) {
-//
-//        NormalRestriction normalRestriction = restrictionMapper,.(restrictionRequestDTO);
-//        restrictionService.save(normalRestriction);
-//        return new ProjectResponse("200", "ADD NORMAL RESTRICTION SUCCESSFULLY");
-//    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -164,26 +171,12 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         if (!client.get().getRestrictionList().isEmpty())
             client.get().getRestrictionList().stream().forEach(restriction ->
                     restrictionResponseDTOList.add(
-                            restrictionMapper.fromRestrictionToRestrictionDTO(restriction)
+                            restrictionMapper.fromRestrictionToRestrictionResponseDTO(restriction)
                     )
             );
         return restrictionResponseDTOList;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public RestrictionResponseDTO showRestriction(String restrictionName, Long clientId) {
-        Optional<Client> client = repository.findById(clientId);
-        if (client.get().getRestrictionList().isEmpty()) {
-            return new RestrictionResponseDTO();
-        }
-        Optional<Restriction> restriction = client.get().getRestrictionList()
-                .stream().filter(r ->
-                        r.getName().equals(restrictionName)).findFirst();
-        if (restriction.isPresent())
-            return restrictionMapper.fromRestrictionToRestrictionDTO(restriction.get());
-        return new RestrictionResponseDTO();
-    }
 
     @Override
     public void addNewBankCardWithRestriction(BankCardRequestDTO bankCardRequestDTO,

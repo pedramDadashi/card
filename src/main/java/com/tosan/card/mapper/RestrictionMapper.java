@@ -10,9 +10,8 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface RestrictionMapper {
 
-    RestrictionResponseDTO fromRestrictionToRestrictionDTO(Restriction restriction);
-
     PeriodicRestriction fromPeriodicRestrictionRequestDTOToPeriodicRestriction(
             PeriodicRestrictionRequestDTO periodicRestrictionRequestDTO);
 
+    RestrictionResponseDTO fromRestrictionToRestrictionResponseDTO(Restriction restriction);
 }

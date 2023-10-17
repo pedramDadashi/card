@@ -5,11 +5,13 @@ import com.tosan.card.dto.request.BankAccountRequestDTO;
 import com.tosan.card.dto.request.ChangeAccountPasswordDTO;
 import com.tosan.card.dto.request.PeriodicRestrictionRequestDTO;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
+import com.tosan.card.dto.response.RestrictionResponseDTO;
 import com.tosan.card.entity.Users;
 import com.tosan.card.service.ClientService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -59,6 +61,14 @@ public class ClientController {
             Authentication authentication) {
         clientService.addPeriodicRestriction(periodicRestrictionRequestDTO,
                         ((Users) authentication.getPrincipal()).getId());
+    }
+
+    @GetMapping("/show-restriction/{restrictionName}")
+    public RestrictionResponseDTO showRestriction(
+            @PathVariable @Valid @NotBlank String restrictionName,
+            Authentication authentication) {
+        return clientService.showRestriction(restrictionName,
+                ((Users) authentication.getPrincipal()).getId());
     }
 
 }
