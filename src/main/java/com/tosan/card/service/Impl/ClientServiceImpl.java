@@ -224,18 +224,29 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 
     }
 
+    @Override
+    public void resetCardPasscode(String cardNumber, Long clientId) {
+        Optional<Client> client = repository.findById(clientId);
+        AtomicReference<Optional<Card>> cardDb = new AtomicReference<>();
+        client.get().getBankAccountList().forEach(
+                ba -> cardDb.set(ba.getCardList().stream().filter(
+                        c -> c.getNumber().equals(cardNumber)).findFirst()));
+        Optional<Card> optionalCard = cardDb.get();
+        if (optionalCard.isEmpty())
+            throw new InvalidCardException("this card number does not exist!");
+        Card card = optionalCard.get();
+        if (card.getPasscode().equals(BANK_CARD_DEFAULT_PASSCODE))
+            throw new PasswordsNotSameException("card passcode has already been reset!");
+        card.setPasscode(BANK_CARD_DEFAULT_PASSCODE);
+        cardService.save(card);
+    }
+
     private void setPeriodDaysFromPeriodType(Restriction restriction) {
         if (!restriction.getPeriod().name().equals(Period.CUSTOM.name())) {
-            if (restriction.getPeriod().name().equals(Period.DAILY.name())) {
-                restriction.setPeriodDays(1);
-                return;
-            }
-            if (restriction.getPeriod().name().equals(Period.WEEKLY.name())) {
-                restriction.setPeriodDays(7);
-                return;
-            }
-            if (restriction.getPeriod().name().equals(Period.MONTHLY.name())) {
-                restriction.setPeriodDays(30);
+            switch (restriction.getPeriod()){
+                case DAILY -> restriction.setPeriodDays(1);
+                case WEEKLY -> restriction.setPeriodDays(7);
+                case MONTHLY -> restriction.setPeriodDays(30);
             }
         }
     }
