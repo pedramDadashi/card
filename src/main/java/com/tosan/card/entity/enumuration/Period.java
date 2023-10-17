@@ -4,11 +4,7 @@ public enum Period {
 
     CUSTOM,
     DAILY,
-    THREE_DAYS,
     WEEKLY,
-    FIFTEEN_DAYS,
     MONTHLY,
-    SEASONAL,
-    YEARLY
 
 }

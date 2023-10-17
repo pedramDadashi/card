@@ -9,6 +9,7 @@ import com.tosan.card.entity.BankAccount;
 import com.tosan.card.entity.Card;
 import com.tosan.card.entity.Client;
 import com.tosan.card.entity.Restriction;
+import com.tosan.card.entity.enumuration.Period;
 import com.tosan.card.entity.enumuration.Role;
 import com.tosan.card.exception.*;
 import com.tosan.card.mapper.BankMapper;
@@ -126,21 +127,23 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         return bankAccountResponseDTOList;
     }
 
-    //    @Override
-//    @Transactional(readOnly = true)
-//    public List<BankAccountResponseDTO> showAllBankAccounts(Long clintId) {
-//        List<BankAccountResponseDTO> baDTOS = new ArrayList<>();
-//        List<BankAccount> bankAccounts = bankAccountService.findAllByClientId(clintId);
-//        if (bankAccounts.isEmpty())
-//            return baDTOS;
-//        bankAccounts.forEach(ba -> baDTOS.add(bankMapper.convertToBankAccountDTO(ba)));
-//        return baDTOS;
-//    }
-
-
     @Override
-    public void addNewPeriodicRestriction(RestrictionRequestDTO restrictionRequestDTO, Long clientId) {
-
+    public void addPeriodicRestriction(PeriodicRestrictionRequestDTO periodicRestrictionRequestDTO
+            , Long clientId) {
+        Optional<Client> client = repository.findById(clientId);
+        if (!client.get().getRestrictionList().isEmpty()) {
+            if (client.get().getRestrictionList().stream().anyMatch(r ->
+                    Objects.equals(r.getName(),
+                            periodicRestrictionRequestDTO.getName())))
+                throw new RestrictionException("this restriction name already exist!");
+        }
+        Restriction restriction = restrictionMapper.
+                fromPeriodicRestrictionRequestDTOToPeriodicRestriction(periodicRestrictionRequestDTO);
+        setPeriodDaysFromPeriodType(restriction);
+        client.get().addRestriction(restriction);
+        restriction.setClient(client.get());
+        restrictionService.save(restriction);
+        repository.save(client.get());
     }
 
 
@@ -226,5 +229,21 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
 
     }
 
+
+    private void setPeriodDaysFromPeriodType(Restriction restriction) {
+        if (!restriction.getPeriod().name().equals(Period.CUSTOM.name())) {
+            if (restriction.getPeriod().name().equals(Period.DAILY.name())) {
+                restriction.setPeriodDays(1);
+                return;
+            }
+            if (restriction.getPeriod().name().equals(Period.WEEKLY.name())) {
+                restriction.setPeriodDays(7);
+                return;
+            }
+            if (restriction.getPeriod().name().equals(Period.MONTHLY.name())) {
+                restriction.setPeriodDays(30);
+            }
+        }
+    }
 
 }

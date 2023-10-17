@@ -39,7 +39,7 @@ public abstract class Client extends Users {
         this.bankAccountList.add(bankAccount);
     }
 
-    protected void addRestriction(Restriction restriction) {
+    public void addRestriction(Restriction restriction) {
         this.restrictionList.add(restriction);
     }
 
