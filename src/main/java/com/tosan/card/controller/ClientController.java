@@ -84,8 +84,8 @@ public class ClientController {
 
     @PutMapping("/change-card-passcode")
     public void changeCardPasscode(
-            @Valid @RequestBody ChangeCardPasswordDTO changeCardPasswordDTO, Authentication authentication) {
-        clientService.changeCardPasscode(changeCardPasswordDTO,
+            @Valid @RequestBody ChangeCardPasscodeDTO changeCardPasscodeDTO, Authentication authentication) {
+        clientService.changeCardPasscode(changeCardPasscodeDTO,
                 ((Users) authentication.getPrincipal()).getId());
     }
 

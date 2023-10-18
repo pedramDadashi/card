@@ -2,13 +2,8 @@ package com.tosan.card.entity;
 
 
 import com.tosan.card.base.entity.BaseEntity;
-import com.tosan.card.entity.Card;
 import com.tosan.card.entity.enumuration.TransactionStatus;
-import com.tosan.card.entity.enumuration.TransactionType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,19 +24,18 @@ public class Transaction extends BaseEntity<Long> {
     @JoinColumn(name = "card_id")
     Card card;
 
-    int DestinationAccountNumber;
+    int destinationAccountNumber;
 
-    Long TransactionAmount;
+    Long amountTransaction;
 
     Long balance;
 
-    TransactionType transactionType;
-
-    LocalDateTime transactionDateTime;
-
+    LocalDateTime timeTransaction;
+@Enumerated(value = EnumType.STRING)
     TransactionStatus transactionStatus;
 
     Long trackingNumber;
+
 
 
 }

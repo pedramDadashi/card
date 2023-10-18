@@ -16,4 +16,8 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class CreditCard extends Card {
 
+    @Override
+    public void deductionFromCardBalance(Long amount) {
+        super.setCardBalance(super.getCardBalance() - amount);
+    }
 }

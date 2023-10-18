@@ -45,7 +45,7 @@ public interface ClientService extends UsersService<Client> {
 
     void addCreditCardWithRestriction(BankCardRequestDTO bankCardRequestDTO, Long clientId);
 
-    void changeCardPasscode(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId);
+    void changeCardPasscode(ChangeCardPasscodeDTO changeCardPasscodeDTO, Long clientId);
 
     void resetCardPasscode(String cardNumber,Long clientId);
 }
