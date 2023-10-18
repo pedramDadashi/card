@@ -30,6 +30,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests((requests) -> requests
                                 .requestMatchers("/registration/**").permitAll()
                                 .requestMatchers("/transaction/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**").permitAll()
                                 .requestMatchers("/client/**").hasAuthority(CLIENT.name())
                                 .anyRequest().authenticated()
                 )
