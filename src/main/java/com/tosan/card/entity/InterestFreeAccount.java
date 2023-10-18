@@ -14,4 +14,8 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class InterestFreeAccount extends BankAccount {
 
+    @Override
+    public void deductionBalanceAccount(Long amount) {
+        super.setBalance(super.getBalance() - amount);
+    }
 }

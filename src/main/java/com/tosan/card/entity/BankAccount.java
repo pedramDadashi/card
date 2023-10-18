@@ -30,16 +30,10 @@ public abstract class BankAccount extends BaseEntity<Long> {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount")
     List<Card> cardList;
 
-    protected BankAccount(String accountName, String bankName, int branchCode,
-                          Long accountNumber, Long balance) {
-        this.accountName = accountName;
-        this.bankName = bankName;
-        this.branchCode = branchCode;
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-    }
-
     public void addCard(Card card) {
         this.cardList.add(card);
     }
+
+    public abstract void deductionBalanceAccount (Long amount);
+
 }

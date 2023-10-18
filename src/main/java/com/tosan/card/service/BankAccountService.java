@@ -13,16 +13,6 @@ import java.util.Optional;
 public interface BankAccountService extends BaseService<BankAccount,Long> {
 
     @Override
-    default void save(BankAccount bankAccount) {
-
-    }
-
-    @Override
-    default void delete(BankAccount bankAccount) {
-
-    }
-
-    @Override
     default Optional<BankAccount> findById(Long aLong) {
         return Optional.empty();
     }
