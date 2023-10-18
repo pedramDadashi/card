@@ -29,6 +29,7 @@ public class SecurityConfig {
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests((requests) -> requests
                                 .requestMatchers("/registration/**").permitAll()
+                                .requestMatchers("/transaction/**").permitAll()
                                 .requestMatchers("/client/**").hasAuthority(CLIENT.name())
                                 .anyRequest().authenticated()
                 )
