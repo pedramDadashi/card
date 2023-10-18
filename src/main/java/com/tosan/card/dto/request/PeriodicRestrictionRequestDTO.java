@@ -1,5 +1,6 @@
 package com.tosan.card.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tosan.card.dto.enumuration.PeriodDTO;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -33,6 +36,8 @@ public class PeriodicRestrictionRequestDTO {
     @Min(1)
     @Max(364)
     int periodRepeat;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    LocalDate periodStartDate;
     @NotNull
     @Min(10000000)
     @Max(Long.MAX_VALUE)
