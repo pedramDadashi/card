@@ -19,4 +19,9 @@ public class PeriodicRestriction extends Restriction {
         super.setRemainingAmountFromRestriction(
                 super.getRemainingAmountFromRestriction() - amount);
     }
+
+    @Override
+    public boolean updateRestriction() {
+        return (super.getNumberOfDaysLeftRestriction() % super.getPeriodDays()) == 0 ;
+    }
 }
