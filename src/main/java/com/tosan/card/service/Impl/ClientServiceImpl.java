@@ -205,18 +205,18 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
     }
 
     @Override
-    public void changeCardPasscode(ChangeCardPasswordDTO changeCardPasswordDTO, Long clientId) {
+    public void changeCardPasscode(ChangeCardPasscodeDTO changeCardPasscodeDTO, Long clientId) {
         Optional<Client> client = repository.findById(clientId);
         AtomicReference<Optional<Card>> cardDb = new AtomicReference<>();
         client.get().getBankAccountList().forEach(
                 ba -> cardDb.set(ba.getCardList().stream().filter(
-                        c -> c.getNumber().equals(changeCardPasswordDTO.getCardNumber())).findFirst()));
+                        c -> c.getNumber().equals(changeCardPasscodeDTO.getCardNumber())).findFirst()));
         Optional<Card> optionalCard = cardDb.get();
         if (optionalCard.isEmpty())
             throw new InvalidCardException("this card number does not exist!");
         Card card = optionalCard.get();
-        bankCardPasscodeLimits(card, changeCardPasswordDTO.getNewPasscode());
-        card.setPasscode(changeCardPasswordDTO.getNewPasscode());
+        bankCardPasscodeLimits(card, changeCardPasscodeDTO.getNewPasscode());
+        card.setPasscode(changeCardPasscodeDTO.getNewPasscode());
         if (!card.isChangedPasscode())
             card.setBlock(false);
         card.setChangedPasscode(true);

@@ -37,4 +37,6 @@ public abstract class Card extends BaseEntity<Long> {
     @JoinColumn(name = "restriction_id")
     Restriction restriction;
 
+    public abstract void deductionFromCardBalance(Long amount);
+
 }

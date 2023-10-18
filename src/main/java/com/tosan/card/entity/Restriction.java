@@ -1,19 +1,12 @@
 package com.tosan.card.entity;
 
 import com.tosan.card.base.entity.BaseEntity;
-import com.tosan.card.dto.enumuration.PeriodDTO;
 import com.tosan.card.entity.enumuration.Period;
-import com.tosan.card.entity.enumuration.UseType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -30,6 +23,7 @@ public abstract class Restriction extends BaseEntity<Long> {
     int periodDays;
     int periodRepeat;
     Long amountRestriction;
+    Long remainingAmountFromRestriction;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     Client client;
@@ -41,5 +35,8 @@ public abstract class Restriction extends BaseEntity<Long> {
         this.periodDays = periodDays;
         this.periodRepeat = periodRepeat;
         this.amountRestriction = amountRestriction;
+        this.remainingAmountFromRestriction = amountRestriction;
     }
+
+    public abstract void deductionFromRemainingAmount (Long amount);
 }

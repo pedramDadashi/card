@@ -14,4 +14,9 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class PeriodicRestriction extends Restriction {
 
+    @Override
+    public void deductionFromRemainingAmount(Long amount) {
+        super.setRemainingAmountFromRestriction(
+                super.getRemainingAmountFromRestriction() - amount);
+    }
 }
