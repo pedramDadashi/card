@@ -13,11 +13,12 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
-public class ChangeCardPasswordDTO {
-
-     @Pattern(regexp = "^[1-9][0-9]{15}$")
-     String cardNumber;
-     @Pattern(regexp = "^[0-9]{4}$")
-     String newPasscode;
+public class ChangeCardPasscodeDTO {
+    @NotNull
+    @Pattern(regexp = "^[1-9][0-9]{15}$")
+    String cardNumber;
+    @NotNull
+    @Pattern(regexp = "^[0-9]{4}$")
+    String newPasscode;
 
 }
