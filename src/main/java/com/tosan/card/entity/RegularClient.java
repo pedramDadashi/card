@@ -16,10 +16,4 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class RegularClient extends Client {
 
-    public RegularClient(String firstname, String lastname, String email,
-                         String nationalCode, String password) {
-        super(firstname, lastname, email, nationalCode, password);
-    }
-
-
 }
