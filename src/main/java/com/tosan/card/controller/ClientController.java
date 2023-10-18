@@ -7,8 +7,6 @@ import com.tosan.card.dto.response.RestrictionResponseDTO;
 import com.tosan.card.entity.Users;
 import com.tosan.card.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
