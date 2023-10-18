@@ -5,6 +5,7 @@ import com.tosan.card.entity.enumuration.Period;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -17,6 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public abstract class Restriction extends BaseEntity<Long> {
 
     String name;

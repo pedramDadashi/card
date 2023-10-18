@@ -3,6 +3,7 @@ package com.tosan.card.entity;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -14,6 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @NoArgsConstructor
 @FieldDefaults(level = PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public class CreditCard extends Card {
 
     @Override

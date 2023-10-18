@@ -7,13 +7,13 @@ import lombok.experimental.FieldDefaults;
 
 import static lombok.AccessLevel.PRIVATE;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-
 @FieldDefaults(level = PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public class RegularClient extends Client {
 
 }
