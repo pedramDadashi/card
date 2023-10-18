@@ -2,10 +2,7 @@ package com.tosan.card.entity;
 
 
 import com.tosan.card.base.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,8 +30,7 @@ public abstract class Card extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bankAccount_id")
     BankAccount bankAccount;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restriction_id")
+    @OneToOne
     Restriction restriction;
 
     public abstract void deductionFromCardBalance(Long amount);
