@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepository>
         implements ClientService {
 
-    private static final String BANK_CARD_DEFAULT_PASSCODE = "1234";
+    public static final String BANK_CARD_DEFAULT_PASSCODE = "1234";
 
     private final BankAccountService bankAccountService;
     private final RestrictionService restrictionService;
@@ -195,7 +195,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
             (500000L + restriction.get().getAmountRestriction()))
             throw new BankAccountException("this bank account balance is insufficient");
         TemporaryBankCard temporaryBankCard =
-                buildTemporaryBankCard(bankCardRequestDTO.getCardName(),
+                cardService.buildTemporaryBankCard(bankCardRequestDTO.getCardName(),
                         restriction.get().getAmountRestriction());
         Card card = cardMapper.fromTemporaryBankCardToCreditCard(temporaryBankCard);
         bankAccount.get().addCard(card);
@@ -216,7 +216,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         if (optionalCard.isEmpty())
             throw new InvalidCardException("this card number does not exist!");
         Card card = optionalCard.get();
-        bankCardPasscodeLimits(card, changeCardPasscodeDTO.getNewPasscode());
+        cardService.bankCardPasscodeLimits(card, changeCardPasscodeDTO.getNewPasscode());
         card.setPasscode(changeCardPasscodeDTO.getNewPasscode());
         if (!card.isChangedPasscode())
             card.setBlock(false);
