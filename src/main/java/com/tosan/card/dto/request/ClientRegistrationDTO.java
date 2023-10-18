@@ -19,12 +19,15 @@ public abstract class ClientRegistrationDTO {
     String firstname;
     @NotBlank(message = "Name cannot be blank")
     String lastname;
+    @NotNull
     @Email(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
             , message = "Email should be valid")
     String email;
+    @NotNull
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
             message = "Password must be stronger")
     String password;
+    @NotNull
     @Size(min = 10, max = 10, message = "National code must be 10 digits")
     String nationalCode;
 

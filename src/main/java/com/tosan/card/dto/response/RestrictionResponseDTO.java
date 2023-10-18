@@ -25,4 +25,5 @@ public class RestrictionResponseDTO {
      int periodDays;
      int periodRepeat;
      Long amountRestriction;
+
 }

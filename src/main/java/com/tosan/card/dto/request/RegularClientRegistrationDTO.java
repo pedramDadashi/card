@@ -8,13 +8,8 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class RegularClientRegistrationDTO extends ClientRegistrationDTO{
 
-    public RegularClientRegistrationDTO(String firstname, String lastname,
-                                        String email, String password, String nationalCode) {
-        super(firstname, lastname, email, password, nationalCode);
-    }
 }
