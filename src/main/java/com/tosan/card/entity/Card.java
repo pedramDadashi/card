@@ -27,10 +27,10 @@ public abstract class Card extends BaseEntity<Long> {
     String cvv2;
     LocalDate expirationDate;
     String passcode;
-    boolean block ;
-    boolean changedPasscode ;
+    boolean block;
+    boolean changedPasscode;
     Long cardBalance;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bankAccount_id")
     BankAccount bankAccount;
     @ManyToOne(fetch = FetchType.LAZY)
