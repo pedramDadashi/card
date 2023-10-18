@@ -27,7 +27,7 @@ public abstract class BankAccount extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     Client client;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bankAccount")
     List<Card> cardList;
 
     public void addCard(Card card) {
