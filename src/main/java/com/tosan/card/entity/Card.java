@@ -1,10 +1,10 @@
 package com.tosan.card.entity;
 
-
 import com.tosan.card.base.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -17,6 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public abstract class Card extends BaseEntity<Long> {
 
     String name;
