@@ -33,4 +33,6 @@ public abstract class Restriction extends BaseEntity<Long> {
     Client client;
 
     public abstract void deductionFromRemainingAmount (Long amount);
+
+    public abstract boolean updateRestriction();
 }
