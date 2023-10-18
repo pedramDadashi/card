@@ -18,5 +18,5 @@ public interface TransactionService extends BaseService<Transaction,Long> {
 
     List<Transaction> findAllByCardNumber(String cardNumber);
 
-    void receiveBankTransaction(TransactionRequestDTO transactionRequestDTO);
+    void receiveTransaction(TransactionRequestDTO transactionRequestDTO);
 }

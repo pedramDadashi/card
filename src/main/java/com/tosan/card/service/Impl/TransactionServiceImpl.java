@@ -53,7 +53,7 @@ public class TransactionServiceImpl extends BaseServiceImpl<Transaction, Long, T
     }
 
     @Override
-    public void receiveBankTransaction(TransactionRequestDTO transactionRequestDTO) {
+    public void receiveTransaction(TransactionRequestDTO transactionRequestDTO) {
         if (transactionRequestDTO.getTimeTransaction().isBefore(LocalDateTime.now()))
             throw new CustomTimeoutException("transaction has timed out");
         Optional<Card> cardDb = cardService.findByNumber(transactionRequestDTO.getCardNumber());
