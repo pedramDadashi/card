@@ -23,19 +23,13 @@ public class Transaction extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     Card card;
-
     int destinationAccountNumber;
-
     Long amountTransaction;
-
     Long balance;
-
     LocalDateTime timeTransaction;
-@Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     TransactionStatus transactionStatus;
-
     Long trackingNumber;
-
 
 
 }

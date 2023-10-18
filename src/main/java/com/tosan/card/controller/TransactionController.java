@@ -20,7 +20,7 @@ public class TransactionController {
     @PostMapping("/receive-bank-transaction")
     public void receiveBankTransaction(
             @Valid @RequestBody TransactionRequestDTO transactionRequestDTO) {
-        transactionService.receiveBankTransaction(transactionRequestDTO);
+        transactionService.receiveTransaction(transactionRequestDTO);
     }
 }
 
