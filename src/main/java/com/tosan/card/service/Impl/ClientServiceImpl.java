@@ -6,11 +6,7 @@ import com.tosan.card.dto.TemporaryBankCard;
 import com.tosan.card.dto.request.*;
 import com.tosan.card.dto.response.BankAccountResponseDTO;
 import com.tosan.card.dto.response.RestrictionResponseDTO;
-import com.tosan.card.entity.BankAccount;
-import com.tosan.card.entity.Card;
-import com.tosan.card.entity.Client;
-import com.tosan.card.entity.Restriction;
-import com.tosan.card.entity.enumuration.Period;
+import com.tosan.card.entity.*;
 import com.tosan.card.entity.enumuration.Role;
 import com.tosan.card.exception.*;
 import com.tosan.card.mapper.BankMapper;
@@ -143,12 +139,17 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         }
         Restriction restriction = restrictionMapper.
                 fromPeriodicRestrictionRequestDTOToPeriodicRestriction(periodicRestrictionRequestDTO);
-        setPeriodDaysFromPeriodType(restriction);
+        restrictionService.setPeriodDaysFromPeriodType(restriction);
+        restrictionService.setNumberOfDaysLeftRestriction(restriction);
+        restriction.setRemainingAmountFromRestriction(
+                restriction.getAmountRestriction());
+        restrictionService.setPeriodStartDate(restriction);
         client.get().addRestriction(restriction);
         restriction.setClient(client.get());
         restrictionService.save(restriction);
         repository.save(client.get());
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -170,7 +171,7 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
         if (client.get().getRestrictionList().isEmpty())
             throw new InvalidRestrictionException("does not exist restriction");
         List<RestrictionResponseDTO> restrictionResponseDTOList = new ArrayList<>();
-        client.get().getRestrictionList().stream().forEach(r ->
+        client.get().getRestrictionList().forEach(r ->
                 restrictionResponseDTOList.add(
                         restrictionMapper.fromRestrictionToRestrictionResponseDTO(r)));
         return restrictionResponseDTOList;
@@ -239,53 +240,6 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long, ClientRepos
             throw new PasswordsNotSameException("card passcode has already been reset!");
         card.setPasscode(BANK_CARD_DEFAULT_PASSCODE);
         cardService.save(card);
-    }
-
-    private void setPeriodDaysFromPeriodType(Restriction restriction) {
-        if (!restriction.getPeriod().name().equals(Period.CUSTOM.name())) {
-            switch (restriction.getPeriod()){
-                case DAILY -> restriction.setPeriodDays(1);
-                case WEEKLY -> restriction.setPeriodDays(7);
-                case MONTHLY -> restriction.setPeriodDays(30);
-            }
-        }
-    }
-
-    private TemporaryBankCard buildTemporaryBankCard(String cardName, Long amountRestriction) {
-        return new TemporaryBankCard(
-                cardName,
-                buildCardNumber(),
-                buildCardCvv2(),
-                buildCardExpireDate(),
-                BANK_CARD_DEFAULT_PASSCODE,
-                amountRestriction
-        );
-    }
-
-    private String buildCardNumber() {
-        Random randomCardNumber = new Random();
-        return String.valueOf(
-                randomCardNumber.nextLong(4444L, 6666L)) +
-               randomCardNumber.nextLong(1111L, 2222L) +
-               randomCardNumber.nextLong(2222L, 3333L) +
-               randomCardNumber.nextLong(3333L, 4444L);
-    }
-
-    private String buildCardCvv2() {
-        Random randomCardCvv2 = new Random();
-        return String.valueOf(randomCardCvv2.nextInt(111, 9999));
-    }
-
-    private LocalDate buildCardExpireDate() {
-        int bankCardValidityPeriod = 40;
-        return LocalDate.now().plusMonths(bankCardValidityPeriod);
-    }
-
-    private void bankCardPasscodeLimits(Card card, String newPasscode) {
-        if (card.getPasscode().equals(newPasscode))
-            throw new PasswordsNotSameException("duplicate new passcode!");
-        if (newPasscode.equals("0000"))
-            throw new PasswordsNotSameException("cannot enter 0000 as the passcode!");
     }
 
 

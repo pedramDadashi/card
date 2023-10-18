@@ -11,4 +11,9 @@ public interface RestrictionService extends BaseService<Restriction,Long> {
 
     Optional<Restriction> findByName(String name);
 
+    void setPeriodDaysFromPeriodType(Restriction restriction);
+
+    void setNumberOfDaysLeftRestriction(Restriction restriction);
+
+    void setPeriodStartDate(Restriction restriction);
 }
