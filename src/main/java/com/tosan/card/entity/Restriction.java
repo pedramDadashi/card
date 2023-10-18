@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -22,21 +24,13 @@ public abstract class Restriction extends BaseEntity<Long> {
     Period period;
     int periodDays;
     int periodRepeat;
+    int numberOfDaysLeftRestriction;
+    LocalDate periodStartDate;
     Long amountRestriction;
     Long remainingAmountFromRestriction;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     Client client;
-
-    protected Restriction(String name, Period period, int periodDays,
-                       int periodRepeat, Long amountRestriction) {
-        this.name = name;
-        this.period = period;
-        this.periodDays = periodDays;
-        this.periodRepeat = periodRepeat;
-        this.amountRestriction = amountRestriction;
-        this.remainingAmountFromRestriction = amountRestriction;
-    }
 
     public abstract void deductionFromRemainingAmount (Long amount);
 }
